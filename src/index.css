@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
-
+/* =========================
+   THEME TOKENS (Tailwind v4)
+   ========================= */
 @theme {
-
-
-  --color-background: #0f1418
+  --color-background: #0f1418;
   --color-foreground: #f0f2f5;
 
   --color-card: #141a1f;
@@ -12,23 +12,165 @@
   --color-primary: #20b2a6;
   --color-primary-foreground: #ffffff;
 
-
   --color-secondary: #1f2830;
-  --color-secondary-foreground: 
+  --color-secondary-foreground: #20b2a6;
+
+  --color-muted: #252e37;
+  --color-muted-foreground: #7a8491;
+
+  --color-border: #242b32;
+
+  --radius: 0.775rem;
+
+  --color-highlight: #f5a623;
+  --color-surface: #1a2329;
+}
+
+/* =========================
+   BASE STYLES
+   ========================= */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: "Inter", sans-serif;
+  }
+
+  .font-serif {
+    font-family: "Playfair Display", serif;
+  }
+}
+
+/* =========================
+   COMPONENTS
+   ========================= */
+@layer components {
+  /* Light glass */
+  .glass {
+    background-color: color-mix(
+      in srgb,
+      var(--color-surface) 50%,
+      transparent
+    );
+    backdrop-filter: blur(16px);
+    border: 1px solid
+      color-mix(in srgb, var(--color-border) 50%, transparent);
+  }
+
+  /* Strong glass (mobile menu, modals) */
+  .glass-strong {
+    background-color: color-mix(
+      in srgb,
+      var(--color-surface) 80%,
+      transparent
+    );
+    backdrop-filter: blur(24px);
+    border: 1px solid
+      color-mix(in srgb, var(--color-border) 60%, transparent);
+  }
+
+  .glass-text {
+    text-shadow: 0 0 30px
+    color-mix(in srgb, var (--color-primary) 50%, transparent);
+  }
+}
+
+/* =========================
+   UTILITIES & ANIMATIONS
+   ========================= */
+@layer utilities {
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+      filter: blur(6px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+    }
+  }
+
+
+  @keyframes slow-drift {
+
+    0%,
+    100% {
+      transform: translate(0,0);
+
+    }
+
+    25% {
+      transform: translate(20px, -30px);
+    }
+
+    50% {
+      transform: translate(-15px, -20px);
+    }
+
+    75% {
+      transform: translate(30px, 10px);
+    }
+  }
+
+
+  .animation-fade-in {
+    animation: fade-in 0.8s ease-out both;
+
+  }
+
+  .animate-delay-100 {
+    animation-delay: 100ms;
+  }
+
+  .animation-delay-200 {
+    animation-delay:200ms;
+  }
+
+  .animation-delay-300 {
+    animation-delay:300ms;
+  }
+
+  .animate-delay-400 {
+    animation-delay: 400ms;
+  }
+
+  .animation-delay-500 {
+    animation-delay: 500ms;
+
+  }
+
+  .animation-delay-600 {
+    animation-delay: 600;;
+  }
+
+
+  .animation-delay-800 {
+    animation-delay: 800;;
+  }
 
 
 
 
 
 
+  .animate-fade-in {
+    animation: fade-in 0.8s ease-out both;
+  }
+}
 
-
-
-
-
-
-
-
-
-
+/* =========================
+   PERFORMANCE SAFETY
+   ========================= */
+@supports not (backdrop-filter: blur(1px)) {
+  .glass,
+  .glass-strong {
+    background-color: var(--color-surface);
+  }
 }
