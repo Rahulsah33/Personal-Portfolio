@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../Sections/Buttons/Button";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
@@ -12,9 +12,22 @@ const navLinks = [
 
 const Navbar = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isScroll, setScroll] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScroll(window.scrollY > 50);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-transparent py-5">
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 
+      ${isScroll ? "glass-strong py-3" : "bg-transparent py-5"}`}
+    >
       <nav className="container mx-auto px-6 flex items-center justify-between">
         {/* Logo */}
         <a
