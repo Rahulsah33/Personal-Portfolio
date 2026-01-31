@@ -82,7 +82,9 @@ const Navbar = () => {
               </a>
             ))}
 
-            <Button className="mt-2">Contact Me</Button>
+            <Button onClick={() => setMobileMenuOpen(false)} className="mt-2">
+              Contact Me
+            </Button>
           </div>
         </div>
       )}

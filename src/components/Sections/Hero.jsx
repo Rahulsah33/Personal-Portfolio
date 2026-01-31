@@ -2,8 +2,10 @@ import React, { useMemo } from "react";
 import Button from "./Buttons/Button";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import AnimatedDownloadButton from "./Buttons/AnimatedDownloadButton";
-import { GitHub, Instagram, LinkedIn } from "@mui/icons-material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Github from "@mui/icons-material/GitHub";
+import Linkedin from "@mui/icons-material/LinkedIn";
+import Twitter from "@mui/icons-material/Twitter";
 
 const skills = [
   "Java",
@@ -96,17 +98,41 @@ const Hero = () => {
             </div>
 
             {/* Social */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 animate-fade-in animation-delay-400">
               <span className="text-sm text-muted-foreground">Follow me:</span>
-              {[GitHub, LinkedIn, Instagram].map((Icon, i) => (
-                <a
-                  key={i}
-                  href="#"
-                  className="p-2 rounded-full glass hover:text-primary transition"
-                >
-                  <Icon fontSize="small" />
-                </a>
-              ))}
+
+              {[
+                {
+                  icon: Github,
+                  href: "https://github.com/Rahulsah33",
+                  label: "GitHub",
+                },
+                {
+                  icon: Linkedin,
+                  href: "https://www.linkedin.com/in/your-linkedin-username",
+                  label: "LinkedIn",
+                },
+                {
+                  icon: Twitter,
+                  href: "https://twitter.com/your-twitter-username",
+                  label: "Twitter",
+                },
+              ].map((social, idx) => {
+                const Icon = social.icon;
+
+                return (
+                  <a
+                    key={idx}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={social.label}
+                    className="p-2 rounded-full glass hover:bg-primary/10 hover:text-primary transition-all duration-300"
+                  >
+                    <Icon className="w-5 h-5" />
+                  </a>
+                );
+              })}
             </div>
           </div>
 
@@ -115,7 +141,7 @@ const Hero = () => {
             <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-primary/30 via-transparent to-primary/10 blur-2xl animate-pulse" />
             <div className="relative glass rounded-3xl p-2">
               <img
-                src="https://images.pexels.com/photos/8603280/pexels-photo-8603280.png"
+                src="/Images/profile.jpg"
                 alt="Rahul Sah"
                 className="w-full aspect-4/5 object-cover rounded-2xl"
               />
@@ -132,7 +158,7 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* 🔥 FULL SCREEN SKILLS */}
+      {/*  SKILLS */}
       <div className="relative z-10 w-screen overflow-hidden py-20 bg-background/80 backdrop-blur">
         <p className="text-sm text-muted-foreground text-center mb-10">
           Technologies I work with
