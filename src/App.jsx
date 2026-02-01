@@ -1,25 +1,33 @@
 import React from "react";
 import Navbar from "./components/Layout/Navbar";
 import Hero from "./components/Sections/Hero";
-import Contacts from "./components/Sections/Contacts";
-import Projects from "./components/Sections/Projects";
-import Testimonials from "./components/Sections/Testimonials";
 import About from "./components/Sections/About";
+import Projects from "./components/Sections/Projects";
 import Experiences from "./components/Sections/Experiences";
+import Education from "./components/Sections/Education";
+import Testimonials from "./components/Sections/Testimonials";
+import Contacts from "./components/Sections/Contacts";
+import Footer from "./components/Sections/Footer";
 
 const App = () => {
   return (
-    <div className="min-h-screen  overflow-x-hidden">
+    <div className="min-h-screen flex flex-col overflow-x-hidden">
+      {/* Navbar */}
       <Navbar />
 
-      <main>
+      {/* Main content */}
+      <main className="flex-1">
         <Hero />
         <About />
         <Projects />
         <Experiences />
+        <Education />
         <Testimonials />
         <Contacts />
       </main>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 };

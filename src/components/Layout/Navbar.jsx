@@ -31,7 +31,7 @@ const Navbar = () => {
       <nav className="container mx-auto px-6 flex items-center justify-between">
         {/* Logo */}
         <a
-          href="#home"
+          href="#hero"
           className="text-xl font-bold tracking-tight hover:text-primary"
         >
           RR<span className="text-primary">.</span>
@@ -54,7 +54,9 @@ const Navbar = () => {
 
         {/* Desktop CTA */}
         <div className="hidden md:block">
-          <Button size="sm">Contact Me</Button>
+          <Button href="#contacts" size="sm">
+            Contact Me
+          </Button>
         </div>
 
         {/* Mobile Menu Button */}
@@ -82,7 +84,11 @@ const Navbar = () => {
               </a>
             ))}
 
-            <Button onClick={() => setMobileMenuOpen(false)} className="mt-2">
+            <Button
+              href="#contacts"
+              onClick={() => setMobileMenuOpen(false)}
+              className="mt-2"
+            >
               Contact Me
             </Button>
           </div>

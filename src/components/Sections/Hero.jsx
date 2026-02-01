@@ -5,9 +5,10 @@ import AnimatedDownloadButton from "./Buttons/AnimatedDownloadButton";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Github from "@mui/icons-material/GitHub";
 import Linkedin from "@mui/icons-material/LinkedIn";
-import Twitter from "@mui/icons-material/Twitter";
+import InstagramIcon from "@mui/icons-material/Instagram";
 import profile from "../../assets/profile.jpg";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import rahulresume from "../../assets/rahulresume.pdf";
 
 const skills = [
   "Java",
@@ -37,7 +38,7 @@ const Hero = () => {
   );
 
   return (
-    <section className="relative min-h-screen overflow-hidden">
+    <section id="hero" className="relative min-h-screen overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0">
         <img
@@ -92,12 +93,15 @@ const Hero = () => {
               Java Backend Developer · Spring Boot · REST APIs · MySQL
             </p>
 
-            <div className="flex gap-4">
+            {/* Contact- Button */}
+
+            <div href="#contacts" className="flex gap-4">
               <Button size="lg">
                 Contact Me <ArrowForwardIcon fontSize="small" />
               </Button>
-              <AnimatedDownloadButton>
-                Download CV
+
+              <AnimatedDownloadButton href={rahulresume} download>
+                Resume
                 <FileDownloadIcon fontSize="small" />
               </AnimatedDownloadButton>
             </div>
@@ -114,13 +118,13 @@ const Hero = () => {
                 },
                 {
                   icon: Linkedin,
-                  href: "https://www.linkedin.com/in/your-linkedin-username",
+                  href: "https://www.linkedin.com/in/rahul-sah-r33/",
                   label: "LinkedIn",
                 },
                 {
-                  icon: Twitter,
-                  href: "https://twitter.com/your-twitter-username",
-                  label: "Twitter",
+                  icon: InstagramIcon,
+                  href: "https://www.instagram.com/rahulsah.33/",
+                  label: "Instagram",
                 },
               ].map((social, idx) => {
                 const Icon = social.icon;
