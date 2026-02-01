@@ -18,7 +18,7 @@ const projects = [
       "A modern and responsive portfolio website showcasing my skills, projects, and experience with smooth animations and a clean UI.",
     image: portfolioproject1,
     tags: ["React", "Tailwind CSS"],
-    github: "https://github.com/Rahulsah33/portfolio",
+    github: "https://github.com/Rahulsah33/Personal-Portfolio",
   },
   {
     title: "Hotel Management System",
@@ -26,7 +26,7 @@ const projects = [
       "A Java-based system to manage hotel operations including room booking, customer records, and billing.",
     image: Hotelproject,
     tags: ["Java", "Swing", "AWT", "MySQL"],
-    github: "https://github.com/Rahulsah33/hotel-management-system",
+    github: "https://github.com/Rahulsah33/Hotel-Management-system",
   },
   {
     title: "Electricity Meter Billing System",
@@ -34,7 +34,7 @@ const projects = [
       "An electricity billing system that calculates usage and generates customer bills using Java and MySQL.",
     image: Electricityproject,
     tags: ["Java", "Swing", "AWT", "MySQL"],
-    github: "https://github.com/Rahulsah33/electricity-billing-system",
+    github: "https://github.com/Rahulsah33/Electricity-Meter-Billing-System",
   },
   {
     title: "Bank Management System",
@@ -42,7 +42,7 @@ const projects = [
       "A Java application for managing banking operations such as deposits, withdrawals, and balance inquiry.",
     image: Bankproject,
     tags: ["Java", "Swing", "AWT", "MySQL"],
-    github: "https://github.com/Rahulsah33/bank-management-system",
+    github: "https://github.com/Rahulsah33/Bank-Management-System",
   },
   {
     title: "Online Food Delivery Application",
@@ -50,7 +50,7 @@ const projects = [
       "A responsive food ordering web application with modern UI and smooth user experience.",
     image: foodproject,
     tags: ["React", "Tailwind CSS"],
-    github: "https://github.com/Rahulsah33/food-delivery-app",
+    github: "https://github.com/Rahulsah33/Online-Food-deliver",
   },
   {
     title: "Real-Time Chat Application",
@@ -58,7 +58,7 @@ const projects = [
       "A real-time chat application enabling instant messaging with dynamic UI updates.",
     image: chatapp,
     tags: ["React", "Spring Boot"],
-    github: "https://github.com/Rahulsah33/chat-application",
+    github: "https://github.com/Rahulsah33/Real-Time-Chat-Application",
   },
   {
     title: "Todo Management Application",
@@ -66,7 +66,7 @@ const projects = [
       "A task management app to add, update, and delete tasks efficiently.",
     image: Todoproject,
     tags: ["React", "Spring Boot"],
-    github: "https://github.com/Rahulsah33/todo-app",
+    github: "https://github.com/Rahulsah33/Todo-Application",
   },
 ];
 
