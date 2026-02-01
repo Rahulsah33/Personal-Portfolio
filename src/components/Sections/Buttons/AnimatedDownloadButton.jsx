@@ -1,6 +1,4 @@
-import FileDownloadIcon from "@mui/icons-material/FileDownload";
-
-const AnimatedDownloadButton = () => {
+const AnimatedDownloadButton = ({ children }) => {
   return (
     <button
       className="relative bg-transparent border border-border
@@ -30,10 +28,7 @@ const AnimatedDownloadButton = () => {
         />
       </svg>
 
-      <span className="relative z-10 flex items-center gap-2">
-        Download CV
-        <FileDownloadIcon fontSize="small" />
-      </span>
+      <span className="relative z-10 flex items-center gap-2">{children}</span>
     </button>
   );
 };

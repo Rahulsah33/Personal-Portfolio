@@ -6,6 +6,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Github from "@mui/icons-material/GitHub";
 import Linkedin from "@mui/icons-material/LinkedIn";
 import Twitter from "@mui/icons-material/Twitter";
+import profile from "../../assets/profile.jpg";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
 
 const skills = [
   "Java",
@@ -94,7 +96,10 @@ const Hero = () => {
               <Button size="lg">
                 Contact Me <ArrowForwardIcon fontSize="small" />
               </Button>
-              <AnimatedDownloadButton />
+              <AnimatedDownloadButton>
+                Download CV
+                <FileDownloadIcon fontSize="small" />
+              </AnimatedDownloadButton>
             </div>
 
             {/* Social */}
@@ -136,12 +141,13 @@ const Hero = () => {
             </div>
           </div>
 
-          {/* Right */}
+          {/* Right-Images */}
+
           <div className="relative max-w-md mx-auto">
             <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-primary/30 via-transparent to-primary/10 blur-2xl animate-pulse" />
             <div className="relative glass rounded-3xl p-2">
               <img
-                src="/Images/profile.jpg"
+                src={profile}
                 alt="Rahul Sah"
                 className="w-full aspect-4/5 object-cover rounded-2xl"
               />
