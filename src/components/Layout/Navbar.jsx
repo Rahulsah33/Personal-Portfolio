@@ -84,13 +84,11 @@ const Navbar = () => {
               </a>
             ))}
 
-            <Button
-              href="#contacts"
-              onClick={() => setMobileMenuOpen(false)}
-              className="mt-2"
-            >
-              Contact Me
-            </Button>
+            <a href="#contacts">
+              <Button onClick={() => setMobileMenuOpen(false)} className="mt-2">
+                Contact Me
+              </Button>
+            </a>
           </div>
         </div>
       )}

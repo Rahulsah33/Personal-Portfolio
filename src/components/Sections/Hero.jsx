@@ -95,13 +95,16 @@ const Hero = () => {
 
             {/* Contact- Button */}
 
-            <div href="#contacts" className="flex gap-4">
-              <Button size="lg">
-                Contact Me <ArrowForwardIcon fontSize="small" />
-              </Button>
+            <div className="flex gap-4">
+              <a href="#contacts">
+                <Button size="lg">
+                  Contact Me
+                  <ArrowForwardIcon fontSize="small" />
+                </Button>
+              </a>
 
-              <AnimatedDownloadButton href={rahulresume} download>
-                Resume
+              <AnimatedDownloadButton download>
+                <a href={rahulresume}>Resume</a>
                 <FileDownloadIcon fontSize="small" />
               </AnimatedDownloadButton>
             </div>
