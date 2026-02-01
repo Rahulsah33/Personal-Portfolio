@@ -53,11 +53,11 @@ const Navbar = () => {
         </div>
 
         {/* Desktop CTA */}
-        <div className="hidden md:block">
-          <Button href="#contacts" size="sm">
-            Contact Me
-          </Button>
-        </div>
+        <a href="#contacts">
+          <div className="hidden md:block">
+            <Button size="sm">Contact Me</Button>
+          </div>
+        </a>
 
         {/* Mobile Menu Button */}
         <button
@@ -84,7 +84,7 @@ const Navbar = () => {
               </a>
             ))}
 
-            <a href="#contacts">
+            <a>
               <Button onClick={() => setMobileMenuOpen(false)} className="mt-2">
                 Contact Me
               </Button>
