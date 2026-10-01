@@ -36,38 +36,27 @@ const Contact = ({ onTriggerToast }) => {
     setIsSubmitting(true);
     setStatusMessage(null);
 
-    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
-    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
-
-    if (!serviceId || !templateId || !publicKey) {
-      // In case environment variables aren't configured yet, fallback gracefully
-      setTimeout(() => {
-        setIsSubmitting(false);
-        setStatusMessage({
-          type: "success",
-          text: "Message simulation recorded! (Configure EmailJS keys in .env.local to route directly to inbox)",
-        });
-        reset();
-        if (onTriggerToast) {
-          onTriggerToast("Message received! Thank you.", "success");
-        }
-      }, 1000);
-      return;
-    }
+    const serviceId =
+      import.meta.env.VITE_EMAILJS_SERVICE_ID || "service_4nkomeh";
+    const templateId =
+      import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "template_qoryaam";
+    const publicKey =
+      import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "MI3x-RJ3mWAKrBWjq";
 
     try {
-      await emailjs.send(
-        serviceId,
-        templateId,
-        {
-          name: data.name,
-          email: data.email,
-          subject: data.subject || "Portfolio Contact Transmission",
-          message: data.message,
-        },
-        publicKey
-      );
+      const templateParams = {
+        name: data.name,
+        from_name: data.name,
+        email: data.email,
+        from_email: data.email,
+        reply_to: data.email,
+        subject: data.subject || "Portfolio Contact Transmission",
+        message: data.message,
+      };
+
+      await emailjs.send(serviceId, templateId, templateParams, {
+        publicKey: publicKey,
+      });
 
       setStatusMessage({
         type: "success",
@@ -81,7 +70,7 @@ const Contact = ({ onTriggerToast }) => {
       console.error("EmailJS submission error:", err);
       setStatusMessage({
         type: "error",
-        text: "Transmission could not be delivered. Please email me directly.",
+        text: "Transmission could not be delivered. Please email me directly at rahulsah8227@gmail.com.",
       });
       if (onTriggerToast) {
         onTriggerToast("Failed to send message.", "error");
