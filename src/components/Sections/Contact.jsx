@@ -17,6 +17,20 @@ const Contact = ({ onTriggerToast }) => {
     formState: { errors },
   } = useForm();
 
+  const [lastAttemptData, setLastAttemptData] = useState(null);
+
+  React.useEffect(() => {
+    const publicKey =
+      import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "MI3x-RJ3mWAKrBWjq";
+    if (publicKey) {
+      try {
+        emailjs.init({ publicKey });
+      } catch (e) {
+        console.warn("EmailJS init warning:", e);
+      }
+    }
+  }, []);
+
   const handleCopyEmail = async () => {
     try {
       await navigator.clipboard.writeText(personalData.contact.email);
@@ -35,6 +49,7 @@ const Contact = ({ onTriggerToast }) => {
   const onSubmit = async (data) => {
     setIsSubmitting(true);
     setStatusMessage(null);
+    setLastAttemptData(data);
 
     const serviceId =
       import.meta.env.VITE_EMAILJS_SERVICE_ID || "service_4nkomeh";
@@ -50,12 +65,12 @@ const Contact = ({ onTriggerToast }) => {
         email: data.email,
         from_email: data.email,
         reply_to: data.email,
-        subject: data.subject || "Portfolio Contact Transmission",
+        subject: data.subject || "Portfolio Contact Message",
         message: data.message,
       };
 
       await emailjs.send(serviceId, templateId, templateParams, {
-        publicKey: publicKey,
+        publicKey,
       });
 
       setStatusMessage({
@@ -63,6 +78,7 @@ const Contact = ({ onTriggerToast }) => {
         text: "Transmission sent successfully! I will reply to you shortly.",
       });
       reset();
+      setLastAttemptData(null);
       if (onTriggerToast) {
         onTriggerToast("Message sent successfully!", "success");
       }
@@ -70,10 +86,10 @@ const Contact = ({ onTriggerToast }) => {
       console.error("EmailJS submission error:", err);
       setStatusMessage({
         type: "error",
-        text: "Transmission could not be delivered. Please email me directly at rahulsah8227@gmail.com.",
+        text: "Could not deliver via EmailJS. Please send directly or re-authenticate Gmail in your EmailJS dashboard.",
       });
       if (onTriggerToast) {
-        onTriggerToast("Failed to send message.", "error");
+        onTriggerToast("EmailJS error. Direct email available below.", "error");
       }
     } finally {
       setIsSubmitting(false);
@@ -289,13 +305,26 @@ const Contact = ({ onTriggerToast }) => {
               {/* Status Notice */}
               {statusMessage && (
                 <div
-                  className={`p-4 rounded-xl text-xs font-mono leading-relaxed border ${
+                  className={`p-4 rounded-xl text-xs font-mono leading-relaxed border space-y-2 ${
                     statusMessage.type === "success"
                       ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-500"
-                      : "bg-red-500/10 border-red-500/20 text-red-500"
+                      : "bg-red-500/10 border-red-500/20 text-red-400"
                   }`}
                 >
-                  {statusMessage.text}
+                  <p>{statusMessage.text}</p>
+                  {statusMessage.type === "error" && lastAttemptData && (
+                    <a
+                      href={`mailto:${personalData.contact.email}?subject=${encodeURIComponent(
+                        lastAttemptData.subject || "Portfolio Contact Message"
+                      )}&body=${encodeURIComponent(
+                        `Hi Rahul,\n\nFrom: ${lastAttemptData.name} (${lastAttemptData.email})\n\nMessage:\n${lastAttemptData.message}`
+                      )}`}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-500/20 border border-red-500/40 text-red-200 hover:bg-red-500/30 transition-colors font-semibold"
+                    >
+                      <span>Click here to send via Email App directly</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  )}
                 </div>
               )}
 
