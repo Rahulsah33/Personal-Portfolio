@@ -1,7 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import emailjs from "@emailjs/browser";
-import { Mail, MapPin, Send, Copy, Check, Terminal, ExternalLink } from "lucide-react";
+import {
+  MapPin,
+  Send,
+  Copy,
+  Check,
+  Terminal,
+  ExternalLink,
+  CheckCircle2,
+  AlertCircle,
+} from "lucide-react";
 import Button from "../ui/Button";
 import { personalData } from "../../data/content";
 
@@ -9,6 +18,7 @@ const Contact = ({ onTriggerToast }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [statusMessage, setStatusMessage] = useState(null);
+  const [lastAttemptData, setLastAttemptData] = useState(null);
 
   const {
     register,
@@ -17,16 +27,14 @@ const Contact = ({ onTriggerToast }) => {
     formState: { errors },
   } = useForm();
 
-  const [lastAttemptData, setLastAttemptData] = useState(null);
-
-  React.useEffect(() => {
+  useEffect(() => {
     const publicKey =
       import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "MI3x-RJ3mWAKrBWjq";
     if (publicKey) {
       try {
         emailjs.init({ publicKey });
       } catch (e) {
-        console.warn("EmailJS init warning:", e);
+        console.warn("EmailJS init:", e);
       }
     }
   }, []);
@@ -51,6 +59,9 @@ const Contact = ({ onTriggerToast }) => {
     setStatusMessage(null);
     setLastAttemptData(data);
 
+    let delivered = false;
+
+    // Strategy 1: Attempt EmailJS
     const serviceId =
       import.meta.env.VITE_EMAILJS_SERVICE_ID || "service_4nkomeh";
     const templateId =
@@ -72,28 +83,60 @@ const Contact = ({ onTriggerToast }) => {
       await emailjs.send(serviceId, templateId, templateParams, {
         publicKey,
       });
+      delivered = true;
+    } catch (emailJsErr) {
+      console.warn("EmailJS attempt error, trying backup endpoint:", emailJsErr);
 
+      // Strategy 2: Backup AJAX delivery directly to user's email
+      try {
+        const response = await fetch(
+          `https://formsubmit.co/ajax/${personalData.contact.email}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify({
+              name: data.name,
+              email: data.email,
+              _subject:
+                data.subject || `New Portfolio Message from ${data.name}`,
+              message: data.message,
+              _template: "table",
+            }),
+          }
+        );
+
+        if (response.ok) {
+          delivered = true;
+        }
+      } catch (backupErr) {
+        console.error("Backup delivery failed:", backupErr);
+      }
+    }
+
+    if (delivered) {
       setStatusMessage({
         type: "success",
-        text: "Transmission sent successfully! I will reply to you shortly.",
+        text: "Transmission dispatched successfully! I will reply to you shortly.",
       });
       reset();
       setLastAttemptData(null);
       if (onTriggerToast) {
-        onTriggerToast("Message sent successfully!", "success");
+        onTriggerToast("Message delivered successfully!", "success");
       }
-    } catch (err) {
-      console.error("EmailJS submission error:", err);
+    } else {
       setStatusMessage({
         type: "error",
-        text: "Could not deliver via EmailJS. Please send directly or re-authenticate Gmail in your EmailJS dashboard.",
+        text: "Could not send automatically. Please click the button below to send directly via your email app.",
       });
       if (onTriggerToast) {
-        onTriggerToast("EmailJS error. Direct email available below.", "error");
+        onTriggerToast("Direct mail dispatch available below.", "error");
       }
-    } finally {
-      setIsSubmitting(false);
     }
+
+    setIsSubmitting(false);
   };
 
   return (
@@ -131,8 +174,9 @@ const Contact = ({ onTriggerToast }) => {
                   Let's Discuss Engineering
                 </h3>
                 <p className="text-sm text-ink-muted leading-relaxed">
-                  I am currently available for full-time Java/Backend roles and software
-                  engineering internships. Reach out directly or dispatch a transmission.
+                  I am currently available for full-time Java & Spring Boot roles
+                  and software engineering internships. Reach out directly or
+                  dispatch a transmission.
                 </p>
               </div>
 
@@ -168,8 +212,12 @@ const Contact = ({ onTriggerToast }) => {
                     <MapPin className="w-4 h-4" />
                   </div>
                   <div>
-                    <div className="text-xs font-mono uppercase text-ink-faint">Base Location</div>
-                    <div className="text-ink font-medium">{personalData.location}</div>
+                    <div className="text-xs font-mono uppercase text-ink-faint">
+                      Base Location
+                    </div>
+                    <div className="text-ink font-medium">
+                      {personalData.location}
+                    </div>
                   </div>
                 </div>
 
@@ -178,8 +226,12 @@ const Contact = ({ onTriggerToast }) => {
                     <Terminal className="w-4 h-4" />
                   </div>
                   <div>
-                    <div className="text-xs font-mono uppercase text-ink-faint">Current Availability</div>
-                    <div className="text-ink font-medium">{personalData.availability}</div>
+                    <div className="text-xs font-mono uppercase text-ink-faint">
+                      Current Availability
+                    </div>
+                    <div className="text-ink font-medium">
+                      {personalData.availability}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -204,7 +256,11 @@ const Contact = ({ onTriggerToast }) => {
 
           {/* Right Column: Transmission Form */}
           <div className="lg:col-span-7 bg-surface border border-border rounded-3xl p-8 sm:p-10 shadow-sm">
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="space-y-6"
+              noValidate
+            >
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {/* Name */}
                 <div className="space-y-2">
@@ -224,7 +280,9 @@ const Contact = ({ onTriggerToast }) => {
                     } text-sm text-ink placeholder:text-ink-faint focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors`}
                   />
                   {errors.name && (
-                    <p className="text-xs text-red-500 font-mono">{errors.name.message}</p>
+                    <p className="text-xs text-red-500 font-mono">
+                      {errors.name.message}
+                    </p>
                   )}
                 </div>
 
@@ -252,7 +310,9 @@ const Contact = ({ onTriggerToast }) => {
                     } text-sm text-ink placeholder:text-ink-faint focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors`}
                   />
                   {errors.email && (
-                    <p className="text-xs text-red-500 font-mono">{errors.email.message}</p>
+                    <p className="text-xs text-red-500 font-mono">
+                      {errors.email.message}
+                    </p>
                   )}
                 </div>
               </div>
@@ -298,7 +358,9 @@ const Contact = ({ onTriggerToast }) => {
                   } text-sm text-ink placeholder:text-ink-faint focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors resize-none`}
                 />
                 {errors.message && (
-                  <p className="text-xs text-red-500 font-mono">{errors.message.message}</p>
+                  <p className="text-xs text-red-500 font-mono">
+                    {errors.message.message}
+                  </p>
                 )}
               </div>
 
@@ -311,10 +373,20 @@ const Contact = ({ onTriggerToast }) => {
                       : "bg-red-500/10 border-red-500/20 text-red-400"
                   }`}
                 >
-                  <p>{statusMessage.text}</p>
+                  <div className="flex items-center gap-2">
+                    {statusMessage.type === "success" ? (
+                      <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0" />
+                    ) : (
+                      <AlertCircle className="w-4 h-4 text-red-400 flex-shrink-0" />
+                    )}
+                    <p>{statusMessage.text}</p>
+                  </div>
+
                   {statusMessage.type === "error" && lastAttemptData && (
                     <a
-                      href={`mailto:${personalData.contact.email}?subject=${encodeURIComponent(
+                      href={`mailto:${
+                        personalData.contact.email
+                      }?subject=${encodeURIComponent(
                         lastAttemptData.subject || "Portfolio Contact Message"
                       )}&body=${encodeURIComponent(
                         `Hi Rahul,\n\nFrom: ${lastAttemptData.name} (${lastAttemptData.email})\n\nMessage:\n${lastAttemptData.message}`
