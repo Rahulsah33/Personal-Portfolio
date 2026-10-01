@@ -12,6 +12,7 @@ import Contact from "./components/Sections/Contact";
 import Footer from "./components/Layout/Footer";
 import ProjectModal from "./components/ui/ProjectModal";
 import Toast from "./components/ui/Toast";
+import CustomCursor from "./components/ui/CustomCursor";
 
 const AppContent = () => {
   const [selectedProject, setSelectedProject] = useState(null);
@@ -26,6 +27,9 @@ const AppContent = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-canvas text-ink transition-colors duration-300">
+      {/* Interactive Blueprint Cursor */}
+      <CustomCursor />
+
       {/* Blueprint Header */}
       <Navbar />
 
