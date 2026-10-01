@@ -15,10 +15,15 @@
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^7.3.7",
     "@mui/material": "^7.3.7",
+    "@react-three/drei": "^10.7.9",
+    "@react-three/fiber": "^9.8.1",
     "@tailwindcss/vite": "^4.1.18",
+    "lucide-react": "^1.49.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-hook-form": "^7.89.0",
     "tailwindcss": "^4.1.18",
+    "three": "^0.186.1",
     "typewriter-effect": "^2.22.0"
   },
   "devDependencies": {

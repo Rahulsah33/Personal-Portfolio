@@ -1,130 +1,106 @@
 import React, { useState } from "react";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
-import coordinator from "../../assets/coordinator.png";
-import manoj from "../../assets/manoj.jpg";
-import abhay from "../../assets/abhay.png";
-
-const testimonials = [
-  {
-    quote:
-      "Rahul has shown great enthusiasm for Java and backend development. His ability to quickly grasp concepts and apply them in projects is impressive.",
-    author: " Manoj Kumar Chaudhary ",
-    role: " HOD, Professor - Computer Science Department (JBIT)",
-    avatar: manoj,
-  },
-  {
-    quote:
-      "Rahul is a disciplined learner with strong fundamentals in Java and Spring Boot. He consistently delivers clean and well-structured code.",
-    author: "Dr. Farhad Aalam",
-    role: " Coordinator , Professor - Computer Science Department (JBIT)",
-    avatar: coordinator,
-  },
-  {
-    quote:
-      "Working with Rahul on our academic project was a positive experience. He was responsible for backend tasks and worked well with the team.",
-    author: "Abhay Yadav",
-    role: "Project Teammate",
-    avatar: abhay,
-  },
-];
+import { Quote, ChevronLeft, ChevronRight, MessageSquareQuote } from "lucide-react";
+import { testimonialsData } from "../../data/content";
 
 const Testimonials = () => {
   const [activeIdx, setActiveIdx] = useState(0);
 
   const next = () => {
-    setActiveIdx((prev) => (prev + 1) % testimonials.length);
+    setActiveIdx((prev) => (prev + 1) % testimonialsData.length);
   };
 
-  const previous = () => {
-    setActiveIdx(
-      (prev) => (prev - 1 + testimonials.length) % testimonials.length,
-    );
+  const prev = () => {
+    setActiveIdx((prev) => (prev - 1 + testimonialsData.length) % testimonialsData.length);
   };
+
+  const current = testimonialsData[activeIdx];
 
   return (
-    <section id="testimonials" className="py-32 relative overflow-hidden">
-      {/* Background Glow */}
-      <div
-        className="absolute top-1/2 left-1/2
-        w-[500px] h-[500px] bg-primary/5
-        rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"
-      />
-
-      <div className="container mx-auto px-6 relative z-10">
+    <section id="testimonials" className="py-24 border-b border-border bg-canvas-subtle relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="text-secondary-foreground text-sm font-medium tracking-wider uppercase">
-            Testimonials
-          </span>
-          <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-6 text-secondary-foreground">
-            Kind words from{" "}
-            <span className="font-serif italic font-normal text-white">
-              mentors & peers.
-            </span>
-          </h2>
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+          <div>
+            <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-primary font-semibold mb-2">
+              <MessageSquareQuote className="w-4 h-4" /> Endorsements
+            </div>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-display tracking-tight text-ink">
+              Feedback from mentors{" "}
+              <span className="font-editorial italic font-normal text-primary">
+                & peers.
+              </span>
+            </h2>
+          </div>
+
+          <p className="font-mono text-xs text-ink-muted uppercase">
+            SEC // 07 — TESTIMONIALS
+          </p>
         </div>
 
-        {/* Testimonial Carousel */}
+        {/* Testimonial Card Display */}
         <div className="max-w-4xl mx-auto">
-          <div className="relative">
-            {/* Main Card */}
-            <div className="glass p-8 md:p-12 rounded-3xl glow-border">
-              <div className="absolute -top-4 left-8 w-12 h-12 rounded-full bg-primary flex items-center justify-center">
-                <FormatQuoteIcon className="text-primary-foreground" />
-              </div>
+          <div className="bg-surface border border-border rounded-3xl p-8 sm:p-12 shadow-md relative overflow-hidden">
+            <div className="w-12 h-12 rounded-2xl bg-primary-subtle text-primary flex items-center justify-center mb-8 border border-primary/20">
+              <Quote className="w-6 h-6" />
+            </div>
 
-              <blockquote className="text-xl md:text-2xl font-medium leading-relaxed mb-8 pt-4">
-                “{testimonials[activeIdx].quote}”
-              </blockquote>
+            <blockquote className="text-lg sm:text-2xl font-display font-medium text-ink leading-relaxed mb-8">
+              "{current.quote}"
+            </blockquote>
 
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pt-6 border-t border-border">
+              {/* Author Details */}
               <div className="flex items-center gap-4">
                 <img
-                  src={testimonials[activeIdx].avatar}
-                  alt={testimonials[activeIdx].author}
-                  className="w-14 h-14 rounded-full object-cover ring-2 ring-primary/20"
+                  src={current.avatar}
+                  alt={current.author}
+                  className="w-14 h-14 rounded-2xl object-cover border border-border"
+                  loading="lazy"
                 />
                 <div>
-                  <div className="font-semibold">
-                    {testimonials[activeIdx].author}
+                  <div className="text-base font-bold font-display text-ink">
+                    {current.author}
                   </div>
-                  <div className="text-sm text-muted-foreground">
-                    {testimonials[activeIdx].role}
+                  <div className="text-xs font-semibold text-primary">
+                    {current.title}
+                  </div>
+                  <div className="text-xs font-mono text-ink-muted">
+                    {current.organization}
                   </div>
                 </div>
               </div>
-            </div>
 
-            {/* Navigation */}
-            <div className="flex items-center justify-center gap-4 mt-8">
-              <button
-                onClick={previous}
-                className="p-3 rounded-full glass hover:bg-primary/10 transition-all"
-              >
-                <ChevronLeftIcon />
-              </button>
+              {/* Navigation Controls */}
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={prev}
+                  className="p-2.5 rounded-xl border border-border bg-canvas-subtle text-ink-muted hover:text-ink hover:border-border-strong transition-colors cursor-pointer"
+                  aria-label="Previous testimonial"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
 
-              <div className="flex gap-2">
-                {testimonials.map((_, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setActiveIdx(idx)}
-                    className={`h-2 rounded-full transition-all duration-300 ${
-                      idx === activeIdx
-                        ? "w-8 bg-primary"
-                        : "w-2 bg-muted-foreground/30 hover:bg-muted-foreground/50"
-                    }`}
-                  />
-                ))}
+                <div className="flex items-center gap-1.5 px-3">
+                  {testimonialsData.map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setActiveIdx(i)}
+                      className={`h-2 rounded-full transition-all cursor-pointer ${
+                        i === activeIdx ? "w-6 bg-primary" : "w-2 bg-border-strong hover:bg-ink-muted"
+                      }`}
+                      aria-label={`Go to testimonial ${i + 1}`}
+                    />
+                  ))}
+                </div>
+
+                <button
+                  onClick={next}
+                  className="p-2.5 rounded-xl border border-border bg-canvas-subtle text-ink-muted hover:text-ink hover:border-border-strong transition-colors cursor-pointer"
+                  aria-label="Next testimonial"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
               </div>
-
-              <button
-                onClick={next}
-                className="p-3 rounded-full glass hover:bg-primary/10 transition-all"
-              >
-                <ChevronRightIcon />
-              </button>
             </div>
           </div>
         </div>

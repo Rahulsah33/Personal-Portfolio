@@ -1,203 +1,188 @@
-import React, { useMemo } from "react";
-import Button from "./Buttons/Button";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import AnimatedDownloadButton from "./Buttons/AnimatedDownloadButton";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Github from "@mui/icons-material/GitHub";
-import Linkedin from "@mui/icons-material/LinkedIn";
-import InstagramIcon from "@mui/icons-material/Instagram";
-import profile from "../../assets/profile.jpg";
-import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import rahulresume from "../../assets/rahulresume.pdf";
-
-const skills = [
-  "Java",
-  "Spring Boot",
-  "REST API",
-  "React",
-  "MySQL",
-  "Vercel",
-  "Tailwind CSS",
-  "Git",
-  "DSA",
-];
+import React, { useState } from "react";
+import { ArrowDown, FileDown, Box, User } from "lucide-react";
+import { GithubIcon, LinkedinIcon, InstagramIcon } from "../ui/SocialIcons";
+import Button from "../ui/Button";
+import Card3D from "../ui/Card3D";
+import SceneCanvas from "../3d/SceneCanvas";
+import HeroCore3D from "../3d/HeroCore3D";
+import ParticleField3D from "../3d/ParticleField3D";
+import { personalData } from "../../data/content";
 
 const Hero = () => {
-  const dots = useMemo(
-    () =>
-      Array.from({ length: 30 }, (_, i) => ({
-        id: i,
-        left: `${Math.random() * 100}%`,
-        top: `${Math.random() * 100}%`,
-        size: Math.random() * 4 + 2,
-        opacity: Math.random() * 0.4 + 0.3,
-        duration: 15 + Math.random() * 20,
-        delay: Math.random() * 5,
-      })),
-    [],
-  );
+  const [viewMode, setViewMode] = useState("photo"); // "photo" | "3d"
 
   return (
-    <section id="hero" className="relative min-h-screen overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0">
-        <img
-          src="https://images.pexels.com/photos/11710281/pexels-photo-11710281.jpeg"
-          alt="Hero background"
-          className="w-full h-full object-cover opacity-40"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-background/80 to-background" />
+    <section
+      id="hero"
+      className="relative min-h-[92vh] flex flex-col justify-center pt-28 pb-16 overflow-hidden border-b border-border"
+    >
+      {/* 3D Background Particle Constellation */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+        <SceneCanvas camera={{ position: [0, 0, 5], fov: 50 }}>
+          <ParticleField3D count={70} />
+        </SceneCanvas>
       </div>
 
-      {/* Floating Dots */}
-      <div className="absolute inset-0 pointer-events-none">
-        {dots.map((dot) => (
-          <span
-            key={dot.id}
-            className="absolute rounded-full"
-            style={{
-              backgroundColor: "#20B2A6",
-              left: dot.left,
-              top: dot.top,
-              width: dot.size,
-              height: dot.size,
-              opacity: dot.opacity,
-              animation: `slow-drift ${dot.duration}s ease-in-out infinite`,
-              animationDelay: `${dot.delay}s`,
-            }}
-          />
-        ))}
-      </div>
+      {/* Blueprint Grid Overlay */}
+      <div className="absolute inset-0 blueprint-grid opacity-50 pointer-events-none z-0" />
+      <div className="absolute inset-0 bg-gradient-to-b from-canvas/40 via-transparent to-canvas pointer-events-none z-0" />
 
-      {/* HERO CONTENT */}
-      <div className="container mx-auto px-6 pt-32 pb-24 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Left */}
-          <div className="space-y-8">
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-sm text-primary">
-              <span className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-              Aspiring Java Developer · Software Engineer
-            </span>
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 w-full my-auto z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+          {/* Left Hero Column (Text & CTAs) */}
+          <div className="lg:col-span-7 space-y-8">
+            {/* Status & Telemetry Pill */}
+            <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-surface/90 backdrop-blur-md border border-border shadow-xs">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
+              </span>
+              <span className="font-mono text-xs font-semibold tracking-wide text-ink">
+                {personalData.availability}
+              </span>
+            </div>
 
-            <h1 className="text-5xl md:text-6xl font-bold leading-tight">
-              Growing into a{" "}
-              <span className="text-primary glow-text">skilled</span>
-              <br />
-              Java developer with
-              <br />
-              <span className="font-serif italic font-normal">Precision</span>
-            </h1>
+            {/* Main Headline */}
+            <div className="space-y-4">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold font-display tracking-tight text-ink leading-[1.1]">
+                Building reliable backend systems{" "}
+                <span className="font-editorial italic font-normal text-primary">
+                  with Java & Spring Boot.
+                </span>
+              </h1>
 
-            <p className="text-lg text-muted-foreground max-w-lg">
-              Hi, I'm Rahul Kumar Sah <br />
-              Java Backend Developer · Spring Boot · REST APIs · MySQL
-            </p>
+              <p className="text-lg sm:text-xl text-ink-muted max-w-2xl leading-relaxed">
+                Hi, I'm <span className="text-ink font-semibold">{personalData.name}</span>.
+                I build web applications and REST APIs using Java, Spring Boot, and MySQL
+                with a focus on clean, efficient code.
+              </p>
+            </div>
 
-            {/* Contact- Button */}
+            {/* CTA Buttons */}
+            <div className="flex flex-wrap items-center gap-3.5 pt-2">
+              <Button
+                variant="primary"
+                size="lg"
+                href="#projects"
+                className="shadow-md"
+              >
+                Inspect Selected Work
+                <ArrowDown className="w-4 h-4" />
+              </Button>
 
-            <div className="flex gap-4">
-              <a href="#contacts">
-                <Button size="lg">
-                  Contact Me
-                  <ArrowForwardIcon fontSize="small" />
-                </Button>
+              <Button
+                variant="secondary"
+                size="lg"
+                href={personalData.resumeUrl}
+                download="Rahul_Kumar_Sah_Resume.pdf"
+                className="font-mono text-sm"
+              >
+                <FileDown className="w-4 h-4 text-primary" />
+                <span>Get Resume</span>
+              </Button>
+            </div>
+
+            {/* Social Channels & Verification */}
+            <div className="pt-4 flex items-center gap-4 text-ink-muted">
+              <span className="text-xs font-mono uppercase tracking-widest text-ink-faint">
+                Connect:
+              </span>
+
+              <a
+                href={personalData.contact.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2.5 rounded-xl border border-border bg-surface hover:bg-surface-hover hover:text-primary hover:border-primary/40 transition-colors"
+                aria-label="GitHub Profile"
+              >
+                <GithubIcon className="w-4 h-4" />
               </a>
 
-              <AnimatedDownloadButton download>
-                <a href={rahulresume}>Resume</a>
-                <FileDownloadIcon fontSize="small" />
-              </AnimatedDownloadButton>
-            </div>
+              <a
+                href={personalData.contact.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2.5 rounded-xl border border-border bg-surface hover:bg-surface-hover hover:text-primary hover:border-primary/40 transition-colors"
+                aria-label="LinkedIn Profile"
+              >
+                <LinkedinIcon className="w-4 h-4" />
+              </a>
 
-            {/* Social */}
-            <div className="flex items-center gap-4 animate-fade-in animation-delay-400">
-              <span className="text-sm text-muted-foreground">Follow me:</span>
-
-              {[
-                {
-                  icon: Github,
-                  href: "https://github.com/Rahulsah33",
-                  label: "GitHub",
-                },
-                {
-                  icon: Linkedin,
-                  href: "https://www.linkedin.com/in/rahul-sah-r33/",
-                  label: "LinkedIn",
-                },
-                {
-                  icon: InstagramIcon,
-                  href: "https://www.instagram.com/rahulsah.33/",
-                  label: "Instagram",
-                },
-              ].map((social, idx) => {
-                const Icon = social.icon;
-
-                return (
-                  <a
-                    key={idx}
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={social.label}
-                    className="p-2 rounded-full glass hover:bg-primary/10 hover:text-primary transition-all duration-300"
-                  >
-                    <Icon className="w-5 h-5" />
-                  </a>
-                );
-              })}
+              <a
+                href={personalData.contact.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2.5 rounded-xl border border-border bg-surface hover:bg-surface-hover hover:text-primary hover:border-primary/40 transition-colors"
+                aria-label="Instagram Profile"
+              >
+                <InstagramIcon className="w-4 h-4" />
+              </a>
             </div>
           </div>
 
-          {/* Right-Images */}
+          {/* Right Hero Column: Interactive 3D Card / Canvas */}
+          <div className="lg:col-span-5 flex flex-col items-center">
+            <div className="relative w-full max-w-md">
+              {/* Top Mode Toggle Badge (Photo vs 3D Core) */}
+              <div className="flex items-center justify-between mb-3 px-1">
+                <div className="font-mono text-[10px] text-ink-faint bg-canvas px-2 py-0.5 border border-border rounded">
+                  FIG. 01 // {viewMode === "3d" ? "3D SCHEMATIC" : "DOSSIER"}
+                </div>
 
-          <div className="relative max-w-md mx-auto">
-            <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-primary/30 via-transparent to-primary/10 blur-2xl animate-pulse" />
-            <div className="relative glass rounded-3xl p-2">
-              <img
-                src={profile}
-                alt="Rahul Sah"
-                className="w-full aspect-4/5 object-cover rounded-2xl"
-              />
-              <div className="absolute -bottom-4 -right-4 glass px-4 py-3 rounded-xl animate-float">
-                <div className="flex items-center gap-2">
-                  <span className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
-                  <span className="text-sm font-medium">
-                    Available for work
-                  </span>
+                <div className="flex items-center gap-1 bg-surface border border-border p-1 rounded-xl shadow-2xs">
+                  <button
+                    onClick={() => setViewMode("photo")}
+                    className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-mono transition-colors cursor-pointer ${
+                      viewMode === "photo"
+                        ? "bg-primary text-primary-fg font-semibold"
+                        : "text-ink-muted hover:text-ink"
+                    }`}
+                    title="View Portrait Dossier"
+                  >
+                    <User className="w-3 h-3" /> Photo
+                  </button>
+                  <button
+                    onClick={() => setViewMode("3d")}
+                    className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-mono transition-colors cursor-pointer ${
+                      viewMode === "3d"
+                        ? "bg-primary text-primary-fg font-semibold"
+                        : "text-ink-muted hover:text-ink"
+                    }`}
+                    title="Interact with 3D Core"
+                  >
+                    <Box className="w-3 h-3" /> 3D Node
+                  </button>
                 </div>
               </div>
+
+              {/* 3D Perspective Card Container */}
+              <Card3D maxTilt={8} scale={1.01} className="w-full">
+                <div className="bg-surface border border-border rounded-3xl p-3 shadow-xl overflow-hidden">
+                  {viewMode === "photo" ? (
+                    <div className="relative rounded-2xl overflow-hidden aspect-[4/5] bg-canvas-subtle">
+                      <img
+                        src={personalData.profileImage}
+                        alt={personalData.name}
+                        className="w-full h-full object-cover object-top"
+                      />
+                    </div>
+                  ) : (
+                    <div className="relative rounded-2xl overflow-hidden aspect-[4/5] bg-canvas-subtle flex items-center justify-center">
+                      <SceneCanvas camera={{ position: [0, 0, 4.5], fov: 45 }}>
+                        <HeroCore3D />
+                      </SceneCanvas>
+                      <div className="absolute bottom-3 inset-x-3 text-center pointer-events-none">
+                        <span className="font-mono text-[10px] text-ink-muted bg-surface/80 backdrop-blur-md px-3 py-1 rounded-full border border-border">
+                          Drag & Move Cursor to Rotate 3D Core
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </Card3D>
             </div>
           </div>
         </div>
-      </div>
-
-      {/*  SKILLS */}
-      <div className="relative z-10 w-screen overflow-hidden py-20 bg-background/80 backdrop-blur">
-        <p className="text-sm text-muted-foreground text-center mb-10">
-          Technologies I work with
-        </p>
-
-        <div className="flex animate-marquee whitespace-nowrap">
-          {[...skills, ...skills].map((skill, idx) => (
-            <span
-              key={idx}
-              className="mx-12 text-2xl font-semibold text-muted-foreground/50 hover:text-primary transition-colors"
-            >
-              {skill}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-10">
-        <a
-          href="#about"
-          className="flex flex-col items-center text-muted-foreground"
-        >
-          <span className="text-xs uppercase tracking-wider">Scroll</span>
-          <ExpandMoreIcon className="animate-bounce" />
-        </a>
       </div>
     </section>
   );

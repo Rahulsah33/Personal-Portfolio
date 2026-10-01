@@ -1,12 +1,47 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>rahul-portfolio</title>
+    
+    <!-- Primary Meta Tags -->
+    <title>Rahul Kumar Sah — Java Backend Developer & Software Engineer</title>
+    <meta name="title" content="Rahul Kumar Sah — Java Backend Developer & Software Engineer" />
+    <meta name="description" content="Portfolio of Rahul Kumar Sah. Specializing in Java, Spring Boot, REST APIs, and MySQL. Building deterministic backend architectures and clean web applications." />
+    <meta name="keywords" content="Rahul Kumar Sah, Java Developer, Spring Boot, Backend Engineer, REST API, MySQL, React, Portfolio" />
+    <meta name="author" content="Rahul Kumar Sah" />
+    <meta name="theme-color" content="#0a0e14" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://github.com/Rahulsah33/Personal-Portfolio" />
+    <meta property="og:title" content="Rahul Kumar Sah — Java Backend Developer" />
+    <meta property="og:description" content="Specializing in Java, Spring Boot, REST APIs, and MySQL. View projects, architecture case studies, and engineering background." />
+
+    <!-- Google Fonts Preconnect & Stylesheets -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- Theme Initializer Script (Prevents FOUC) -->
+    <script>
+      (function() {
+        try {
+          var saved = localStorage.getItem('portfolio-theme');
+          var pref = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+          var theme = saved || pref;
+          if (theme === 'light') {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.classList.add('light');
+          } else {
+            document.documentElement.classList.remove('light');
+            document.documentElement.classList.add('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
   </head>
-  <body>
+  <body class="bg-canvas text-ink antialiased selection:bg-primary selection:text-white transition-colors duration-300">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

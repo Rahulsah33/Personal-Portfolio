@@ -1,152 +1,159 @@
-import React from "react";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import KeyboardDoubleArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUp";
-import portfolioproject1 from "../../assets/portfolioproject1.png";
-import Hotelproject from "../../assets/Hotelproject.jpg";
-import Electricityproject from "../../assets/Electricityproject.png";
-import Bankproject from "../../assets/Bankproject.png";
-import foodproject from "../../assets/foodproject.jpeg";
-import chatapp from "../../assets/chatapp.png";
-import Todoproject from "../../assets/Todoproject.png";
+import React, { useState } from "react";
+import { FolderGit2, ExternalLink, ArrowRight, Eye } from "lucide-react";
+import { GithubIcon } from "../ui/SocialIcons";
+import Card3D from "../ui/Card3D";
+import { projectsData } from "../../data/content";
 
-import AnimatedDownloadButton from "./Buttons/AnimatedDownloadButton";
+const categories = ["All", "Full Stack", "Java Desktop", "Frontend"];
 
-const projects = [
-  {
-    title: "Personal Developer Portfolio",
-    description:
-      "A modern and responsive portfolio website showcasing my skills, projects, and experience with smooth animations and a clean UI.",
-    image: portfolioproject1,
-    tags: ["React", "Tailwind CSS"],
-    github: "https://github.com/Rahulsah33/Personal-Portfolio",
-  },
-  {
-    title: "Hotel Management System",
-    description:
-      "A Java-based system to manage hotel operations including room booking, customer records, and billing.",
-    image: Hotelproject,
-    tags: ["Java", "Swing", "AWT", "MySQL"],
-    github: "https://github.com/Rahulsah33/Hotel-Management-system",
-  },
-  {
-    title: "Electricity Meter Billing System",
-    description:
-      "An electricity billing system that calculates usage and generates customer bills using Java and MySQL.",
-    image: Electricityproject,
-    tags: ["Java", "Swing", "AWT", "MySQL"],
-    github: "https://github.com/Rahulsah33/Electricity-Meter-Billing-System",
-  },
-  {
-    title: "Bank Management System",
-    description:
-      "A Java application for managing banking operations such as deposits, withdrawals, and balance inquiry.",
-    image: Bankproject,
-    tags: ["Java", "Swing", "AWT", "MySQL"],
-    github: "https://github.com/Rahulsah33/Bank-Management-System",
-  },
-  {
-    title: "Online Food Delivery Application",
-    description:
-      "A responsive food ordering web application with modern UI and smooth user experience.",
-    image: foodproject,
-    tags: ["React", "Tailwind CSS"],
-    github: "https://github.com/Rahulsah33/Online-Food-deliver",
-  },
-  {
-    title: "Real-Time Chat Application",
-    description:
-      "A real-time chat application enabling instant messaging with dynamic UI updates.",
-    image: chatapp,
-    tags: ["React", "Spring Boot"],
-    github: "https://github.com/Rahulsah33/Real-Time-Chat-Application",
-  },
-  {
-    title: "Todo Management Application",
-    description:
-      "A task management app to add, update, and delete tasks efficiently.",
-    image: Todoproject,
-    tags: ["React", "Spring Boot"],
-    github: "https://github.com/Rahulsah33/Todo-Application",
-  },
-];
+const Projects = ({ onSelectProject }) => {
+  const [activeCategory, setActiveCategory] = useState("All");
 
-const Projects = () => {
+  const filteredProjects =
+    activeCategory === "All"
+      ? projectsData
+      : projectsData.filter((p) => p.category === activeCategory);
+
   return (
-    <section id="projects" className="py-32 relative overflow-hidden">
-      {/* Background glows */}
-      <div className="absolute top-1/4 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-1/4 left-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
-
-      <div className="container mx-auto px-6 relative z-10">
+    <section id="projects" className="py-24 border-b border-border bg-canvas relative">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="text-sm uppercase tracking-wider text-muted-foreground">
-            Featured Work
-          </span>
-          <h2 className="text-4xl md:text-5xl font-bold mt-4 text-white">
-            Projects that{" "}
-            <span className="font-serif italic font-normal text-primary">
-              make an impact
-            </span>
-          </h2>
-          <p className="text-muted-foreground mt-4">
-            A selection of projects demonstrating my skills in frontend,
-            backend, and full-stack development.
-          </p>
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+          <div>
+            <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-primary font-semibold mb-2">
+              <FolderGit2 className="w-4 h-4" /> Portfolio Index
+            </div>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-display tracking-tight text-ink">
+              Selected works &{" "}
+              <span className="font-editorial italic font-normal text-primary">
+                architectures.
+              </span>
+            </h2>
+          </div>
+
+          {/* Filter Pills */}
+          <div className="flex flex-wrap gap-2 p-1.5 rounded-2xl bg-canvas-subtle border border-border">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`px-4 py-2 rounded-xl text-xs font-display font-semibold transition-all cursor-pointer ${
+                  activeCategory === cat
+                    ? "bg-primary text-primary-fg shadow-xs"
+                    : "text-ink-muted hover:text-ink hover:bg-surface"
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* Projects Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project, index) => (
-            <div
-              key={index}
-              className="group glass rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2"
+        {/* Project Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filteredProjects.map((project, idx) => (
+            <Card3D
+              key={project.id || idx}
+              maxTilt={7}
+              scale={1.02}
+              className="h-full rounded-3xl"
             >
-              {/* Image */}
-              <div className="relative aspect-video overflow-hidden">
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                />
+              <div className="group bg-surface border border-border rounded-3xl overflow-hidden flex flex-col justify-between h-full shadow-xs hover:border-primary/40 transition-colors">
+                {/* Top: Image Preview & Category Badge */}
+                <div>
+                  <div className="relative aspect-video overflow-hidden bg-canvas-subtle border-b border-border">
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
 
-                {/* Hover Overlay */}
-                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                  <a
-                    href={project.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="View source code on GitHub"
-                    className="flex items-center gap-2 px-5 py-3 rounded-full bg-primary text-primary-foreground font-medium hover:scale-105 transition"
+                    <div className="absolute top-3 left-3">
+                      <span className="font-mono text-[11px] uppercase tracking-wider px-2.5 py-1 rounded-md bg-surface/90 backdrop-blur-md text-ink border border-border shadow-xs font-semibold">
+                        {project.category}
+                      </span>
+                    </div>
+
+                    {project.metrics && (
+                      <div className="absolute bottom-3 right-3">
+                        <span className="font-mono text-[10px] px-2 py-1 rounded-md bg-canvas/90 backdrop-blur-md text-primary border border-primary/30 font-medium">
+                          {project.metrics}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Content Details */}
+                  <div className="p-6 space-y-3">
+                    <h3 className="text-xl font-bold font-display text-ink group-hover:text-primary transition-colors">
+                      {project.title}
+                    </h3>
+
+                    <p className="text-sm text-ink-muted leading-relaxed line-clamp-2">
+                      {project.tagline}
+                    </p>
+
+                    {/* Tech Tags */}
+                    <div className="flex flex-wrap gap-1.5 pt-2">
+                      {project.tags.slice(0, 4).map((tag, tIdx) => (
+                        <span
+                          key={tIdx}
+                          className="px-2.5 py-1 text-[11px] font-mono rounded-lg bg-canvas-subtle text-ink-muted border border-border/70"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                      {project.tags.length > 4 && (
+                        <span className="px-2 py-1 text-[10px] font-mono text-ink-faint">
+                          +{project.tags.length - 4}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Card Footer Actions */}
+                <div className="px-6 py-4 border-t border-border/70 bg-canvas-subtle flex items-center justify-between gap-3">
+                  <button
+                    onClick={() => onSelectProject(project)}
+                    className="inline-flex items-center gap-1.5 text-xs font-display font-semibold text-primary hover:text-[var(--primary-hover)] transition-colors cursor-pointer"
                   >
-                    <GitHubIcon fontSize="small" />
-                    View Code
-                  </a>
+                    <Eye className="w-3.5 h-3.5" />
+                    <span>Case Study</span>
+                    <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+                  </button>
+
+                  <div className="flex items-center gap-2">
+                    {project.github && (
+                      <a
+                        href={project.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-2 rounded-lg border border-border bg-surface text-ink-muted hover:text-ink hover:border-border-strong transition-colors"
+                        aria-label="View GitHub repository"
+                        title="GitHub Repository"
+                      >
+                        <GithubIcon className="w-4 h-4" />
+                      </a>
+                    )}
+
+                    {project.live && (
+                      <a
+                        href={project.live}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-2 rounded-lg border border-border bg-surface text-ink-muted hover:text-primary hover:border-primary/40 transition-colors"
+                        aria-label="View live project"
+                        title="Live Demo"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                      </a>
+                    )}
+                  </div>
                 </div>
               </div>
-
-              {/* Content */}
-              <div className="p-6 space-y-4">
-                <h3 className="text-xl font-semibold text-white">
-                  {project.title}
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  {project.description}
-                </p>
-
-                {/* Tech Tags */}
-                <div className="flex flex-wrap gap-2">
-                  {project.tags.map((tag, i) => (
-                    <span
-                      key={i}
-                      className="px-3 py-1 text-xs rounded-full bg-primary/10 text-primary"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
+            </Card3D>
           ))}
         </div>
       </div>
