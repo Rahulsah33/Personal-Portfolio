@@ -371,7 +371,7 @@ export const educationData = [
     highlights: "Focusing on backend systems, Spring Boot micro-architectures, and practical AI integrations.",
   },
   {
-    period: "-2021",
+    period: "2019 — 2021",
     degree: "Higher Secondary Education (XII)",
     field: "Science Stream",
     institute: "National Infotech Secondary School",

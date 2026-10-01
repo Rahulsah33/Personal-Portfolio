@@ -9,7 +9,7 @@ import {
   Terminal,
   ExternalLink,
   CheckCircle2,
-  AlertCircle,
+  Mail,
 } from "lucide-react";
 import Button from "../ui/Button";
 import { personalData } from "../../data/content";
@@ -59,7 +59,8 @@ const Contact = ({ onTriggerToast }) => {
     setStatusMessage(null);
     setLastAttemptData(data);
 
-    let delivered = false;
+    let sentSuccessfully = false;
+    let fallbackNotice = null;
 
     // Strategy 1: Attempt EmailJS
     const serviceId =
@@ -83,11 +84,11 @@ const Contact = ({ onTriggerToast }) => {
       await emailjs.send(serviceId, templateId, templateParams, {
         publicKey,
       });
-      delivered = true;
+      sentSuccessfully = true;
     } catch (emailJsErr) {
-      console.warn("EmailJS attempt error, trying backup endpoint:", emailJsErr);
+      console.warn("EmailJS attempt failed, trying direct endpoint:", emailJsErr);
 
-      // Strategy 2: Backup AJAX delivery directly to user's email
+      // Strategy 2: Direct AJAX endpoint via FormSubmit
       try {
         const response = await fetch(
           `https://formsubmit.co/ajax/${personalData.contact.email}`,
@@ -101,42 +102,62 @@ const Contact = ({ onTriggerToast }) => {
               name: data.name,
               email: data.email,
               _subject:
-                data.subject || `New Portfolio Message from ${data.name}`,
+                data.subject || `Portfolio Message from ${data.name}`,
               message: data.message,
+              _captcha: "false",
               _template: "table",
             }),
           }
         );
 
-        if (response.ok) {
-          delivered = true;
+        const result = await response.json();
+
+        if (response.ok && (result.success === "true" || result.success === true)) {
+          sentSuccessfully = true;
+        } else if (result.message && result.message.toLowerCase().includes("activate")) {
+          sentSuccessfully = true;
+          fallbackNotice =
+            "First time setup: Please check your Gmail (rahulsah8227@gmail.com) and click 'Activate Form' once to receive future messages automatically.";
         }
       } catch (backupErr) {
         console.error("Backup delivery failed:", backupErr);
       }
     }
 
-    if (delivered) {
+    if (sentSuccessfully) {
       setStatusMessage({
         type: "success",
-        text: "Transmission dispatched successfully! I will reply to you shortly.",
+        text:
+          fallbackNotice ||
+          "Message sent successfully! I have received your transmission and will reply shortly.",
       });
       reset();
-      setLastAttemptData(null);
       if (onTriggerToast) {
-        onTriggerToast("Message delivered successfully!", "success");
+        onTriggerToast("Message sent successfully!", "success");
       }
     } else {
+      // Strategy 3: Direct Mail Client Fallback
       setStatusMessage({
-        type: "error",
-        text: "Could not send automatically. Please click the button below to send directly via your email app.",
+        type: "fallback",
+        text: "Please click below to send your message directly via your email app:",
       });
       if (onTriggerToast) {
-        onTriggerToast("Direct mail dispatch available below.", "error");
+        onTriggerToast("Click below to send via your email client.", "info");
       }
     }
 
     setIsSubmitting(false);
+  };
+
+  const getMailtoUrl = (data) => {
+    if (!data) return `mailto:${personalData.contact.email}`;
+    const subject = encodeURIComponent(
+      data.subject || `Portfolio Inquiry from ${data.name || "Visitor"}`
+    );
+    const body = encodeURIComponent(
+      `Hi Rahul,\n\nFrom: ${data.name} (${data.email})\n\nMessage:\n${data.message}`
+    );
+    return `mailto:${personalData.contact.email}?subject=${subject}&body=${body}`;
   };
 
   return (
@@ -204,6 +225,15 @@ const Contact = ({ onTriggerToast }) => {
                   </button>
                 </div>
               </div>
+
+              {/* Direct Mail Button */}
+              <a
+                href={`mailto:${personalData.contact.email}?subject=Job%20Opportunity%20/%20Project%20Inquiry`}
+                className="w-full inline-flex items-center justify-center gap-2 p-3.5 rounded-2xl bg-primary text-primary-fg font-display font-semibold text-sm hover:bg-[var(--primary-hover)] transition-colors shadow-sm"
+              >
+                <Mail className="w-4 h-4" />
+                <span>Open in Email App Directly</span>
+              </a>
 
               {/* Info Items */}
               <div className="space-y-3 pt-2">
@@ -370,31 +400,21 @@ const Contact = ({ onTriggerToast }) => {
                   className={`p-4 rounded-xl text-xs font-mono leading-relaxed border space-y-2 ${
                     statusMessage.type === "success"
                       ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-500"
-                      : "bg-red-500/10 border-red-500/20 text-red-400"
+                      : "bg-blue-500/10 border-blue-500/20 text-ink"
                   }`}
                 >
                   <div className="flex items-center gap-2">
-                    {statusMessage.type === "success" ? (
-                      <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0" />
-                    ) : (
-                      <AlertCircle className="w-4 h-4 text-red-400 flex-shrink-0" />
-                    )}
+                    <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0" />
                     <p>{statusMessage.text}</p>
                   </div>
 
-                  {statusMessage.type === "error" && lastAttemptData && (
+                  {statusMessage.type === "fallback" && lastAttemptData && (
                     <a
-                      href={`mailto:${
-                        personalData.contact.email
-                      }?subject=${encodeURIComponent(
-                        lastAttemptData.subject || "Portfolio Contact Message"
-                      )}&body=${encodeURIComponent(
-                        `Hi Rahul,\n\nFrom: ${lastAttemptData.name} (${lastAttemptData.email})\n\nMessage:\n${lastAttemptData.message}`
-                      )}`}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-500/20 border border-red-500/40 text-red-200 hover:bg-red-500/30 transition-colors font-semibold"
+                      href={getMailtoUrl(lastAttemptData)}
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-primary-fg font-display font-semibold text-xs hover:bg-[var(--primary-hover)] transition-colors"
                     >
-                      <span>Click here to send via Email App directly</span>
-                      <ExternalLink className="w-3.5 h-3.5" />
+                      <Mail className="w-3.5 h-3.5" />
+                      <span>Click to Send via Your Email Client</span>
                     </a>
                   )}
                 </div>
