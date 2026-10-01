@@ -90,10 +90,11 @@ const CoreGeometry = ({ isDark }) => {
           />
         </mesh>
 
-        {/* Glowing Center Core */}
+        {/* Glowing Center Core with internal point light */}
         <mesh>
-          <sphereGeometry args={[0.3, 32, 32]} />
+          <sphereGeometry args={[0.32, 32, 32]} />
           <meshBasicMaterial color={coreColor} />
+          <pointLight color={coreColor} intensity={isDark ? 4.0 : 2.5} distance={10} decay={2} />
         </mesh>
 
         {/* Orbiting Concentric Blueprint Rings */}
